@@ -1,0 +1,37 @@
+#!/bin/zsh
+
+
+while [[ 1 ]]
+do
+	running=$(ps -ef | grep "/usr/bin/rsync" | grep -v grep)
+	
+	if [ -d "/Volumes/EMMC Images" ]
+	then 
+		echo "EMMC Images is mounted, so checking for files to copy"
+		running=$(ps -ef | grep "/usr/bin/rsync" | grep -v grep)
+		if [ ! $running ] 
+		then
+			echo "EMMC Images is mounted, so checking for files to copy"
+			/usr/bin/rsync --exclude '.*' --stats -atrv /Volumes/EMMC\ Images/ /Users/adamfenn/Documents/Astro\ Images/EMMC\ Images/ 
+			echo 
+		fi
+	fi
+	
+	if [ -d "/Volumes/TF Images" ]
+	then 
+		running=$(ps -ef | grep "/usr/bin/rsync" | grep -v grep)
+		if [ ! $running ] 
+		then
+			echo "TF Images is mounted, so checking for files to copy"
+			/usr/bin/rsync --exclude '.*' --stats -atrv /Volumes/TF\ Images/ /Users/adamfenn/Documents/Astro\ Images/TF\ Images/ 
+			echo
+		fi
+	fi
+	if [[ $1 != '--loop' ]]
+	then
+		break;
+		
+	fi
+	echo "Restarting in 30 seconds..."
+	sleep 30
+done
