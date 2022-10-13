@@ -1,0 +1,2 @@
+# astrosync
+rsync for ASIAIR 
